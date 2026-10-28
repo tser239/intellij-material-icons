@@ -40,7 +40,7 @@ jobs:
         run: ./gradlew test buildPlugin verifyPlugin
 
       - name: Publish to JetBrains Marketplace
-        if: startsWith(github.ref, 'refs/tags/') && env.PUBLISH_TOKEN != ''
+        if: startsWith(github.ref, 'refs/tags/') && env.PUBLISH_TOKEN != '' && vars.SKIP_PUBLISH != 'true'
         run: ./gradlew publishPlugin
 
       - name: Create GitHub release
