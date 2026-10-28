@@ -10,5 +10,11 @@ out/
 .DS_Store
 local.properties
 
+# Signing material must never be committed.
+*.pem
+*.crt
+*.p12
+*.jks
+
 # Keep the wrapper committed.
 !gradle/wrapper/gradle-wrapper.jar

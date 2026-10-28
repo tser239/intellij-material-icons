@@ -140,6 +140,62 @@ targets Java 25, which is the JBR shipped with 2026.2. It depends only on
 `verifyPluginConfiguration` reports no issues, and the Plugin Verifier reports `Compatible`
 against WS-262.10968.77.
 
+## Release
+
+The version lives in `gradle.properties` (`pluginVersion`); the change notes live in
+`build.gradle.kts` (`pluginConfiguration.changeNotes`). For a release:
+
+1. Bump `pluginVersion`, update the change notes, and commit.
+2. Tag the commit and push the tag:
+
+   ```bash
+   git tag -a v0.1.0 -m "v0.1.0"
+   git push origin v0.1.0
+   ```
+
+3. The [Release workflow](.github/workflows/release.yml) runs the tests and the Plugin Verifier,
+   publishes to the Marketplace when `PUBLISH_TOKEN` is configured, and attaches the ZIP to a
+   GitHub release. Pushing to `main` runs the lighter [Build workflow](.github/workflows/build.yml).
+
+Everything can be done locally too:
+
+```bash
+./gradlew test buildPlugin verifyPlugin
+gh release create v0.1.0 build/distributions/*.zip --generate-notes
+PUBLISH_TOKEN=... ./gradlew publishPlugin
+```
+
+**The first Marketplace upload must be manual** — JetBrains requires the plugin to exist before
+Gradle can publish updates to it. Log in at <https://plugins.jetbrains.com/author/me>, choose
+**Add new plugin**, and upload `build/distributions/intellij-material-icons-0.1.0.zip`. Every later
+version can then be published by the workflow or by `publishPlugin`.
+
+### Signing
+
+Signing is optional, but without a signature the IDE shows a warning when installing the plugin.
+The build signs automatically when these environment variables are present, so no certificate is
+ever committed:
+
+| Variable | Value |
+| --- | --- |
+| `CERTIFICATE_CHAIN` | Base64 of the certificate chain (`base64 -w0 chain.crt`) |
+| `PRIVATE_KEY` | Base64 of the RSA private key (`base64 -w0 private.pem`) |
+| `PRIVATE_KEY_PASSWORD` | Passphrase chosen when generating the key |
+| `PUBLISH_TOKEN` | Marketplace token from <https://plugins.jetbrains.com/author/me/tokens> |
+
+Generate a key pair and a self-signed certificate (valid for ten years):
+
+```bash
+openssl genpkey -aes-256-cbc -algorithm RSA -out private_encrypted.pem \
+  -pkeyopt rsa_keygen_bits:4096
+openssl rsa -in private_encrypted.pem -out private.pem
+openssl req -key private.pem -new -x509 -days 3650 -out chain.crt
+```
+
+For GitHub Actions, add the four values under **Settings | Secrets and variables | Actions** of
+the repository. `signPlugin` and `publishPlugin` read them from the environment. `publishPlugin`
+runs `signPlugin` first when the certificate and key are available.
+
 ## Icon theme
 
 The loader understands the upstream `material-icons.json` format:

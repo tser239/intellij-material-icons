@@ -80,6 +80,19 @@ intellijPlatform {
     // Starting an IDE during the build to index the settings page is unnecessary for local builds.
     buildSearchableOptions = false
 
+    // Credentials come from the environment so nothing secret is ever committed. Without them,
+    // signPlugin is skipped and publishPlugin has no token.
+    signing {
+        certificateChain.set(providers.environmentVariable("CERTIFICATE_CHAIN"))
+        privateKey.set(providers.environmentVariable("PRIVATE_KEY"))
+        password.set(providers.environmentVariable("PRIVATE_KEY_PASSWORD"))
+    }
+
+    publishing {
+        token.set(providers.environmentVariable("PUBLISH_TOKEN"))
+        channels = listOf("default")
+    }
+
     pluginVerification {
         ides {
             // Verify against an IDE that is already installed instead of downloading multi-GB builds:
