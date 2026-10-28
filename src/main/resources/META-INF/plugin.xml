@@ -1,0 +1,55 @@
+<!-- See https://plugins.jetbrains.com/docs/intellij/plugin-configuration-file.html -->
+<idea-plugin url="https://github.com/tser239/intellij-material-icons">
+    <id>io.github.tser239.materialicons</id>
+    <name>Material Icons for IDEs</name>
+    <vendor url="https://github.com/tser239/intellij-material-icons">tser239</vendor>
+
+    <description><![CDATA[
+        <p>Gives files and folders the icons and name/extension associations of the MIT-licensed
+        <a href="https://github.com/material-extensions/vscode-material-icon-theme">Material Icon Theme</a>
+        (1256 icons, 2156 exact file names, 1391 extensions, 4674 folder names).</p>
+        <p>Icons are resolved by exact file name (e.g. <code>Dockerfile</code>), file extension
+        (e.g. <code>.kt</code>) and folder name (e.g. <code>src</code>). The lookup is index-free and
+        cached by the platform, so it stays cheap even in large projects.</p>
+        <p>File icons are the upstream artwork unchanged. Folder icons keep the upstream colour and
+        symbol but are redrawn on IntelliJ's own folder silhouette, so they still look at home in the
+        Project View.</p>
+        <p>Additional associations can be added under
+        <b>Settings | Appearance &amp; Behavior | Material Icons</b>.</p>
+        <p>Free to use. If it saves you time, you can
+        <a href="https://ko-fi.com/tser239">buy me a coffee</a>.</p>
+    ]]></description>
+
+    <!-- Only platform APIs are used, so the plugin can be installed in any IntelliJ-based IDE. -->
+    <depends>com.intellij.modules.platform</depends>
+
+    <!-- Lowest supported IDE build. Keep in sync with pluginSinceBuild in gradle.properties. -->
+    <idea-version since-build="262"/>
+
+    <extensions defaultExtensionNs="com.intellij">
+        <fileIconProvider
+            id="materialIcons.fileIconProvider"
+            implementation="io.github.tser239.materialicons.icons.MaterialFileIconProvider"
+            order="first"/>
+
+        <iconProvider
+            id="materialIcons.folderIconProvider"
+            implementation="io.github.tser239.materialicons.icons.MaterialFolderIconProvider"
+            order="first"/>
+
+        <applicationService
+            serviceImplementation="io.github.tser239.materialicons.icons.MaterialIconsService"/>
+
+        <postStartupActivity
+            implementation="io.github.tser239.materialicons.icons.MaterialIconsPreloader"/>
+
+        <applicationService
+            serviceImplementation="io.github.tser239.materialicons.settings.MaterialIconsSettings"/>
+
+        <applicationConfigurable
+            id="io.github.tser239.materialicons.settings"
+            instance="io.github.tser239.materialicons.settings.MaterialIconsConfigurable"
+            displayName="Material Icons"
+            parentId="appearance"/>
+    </extensions>
+</idea-plugin>

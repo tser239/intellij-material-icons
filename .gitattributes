@@ -1,0 +1,3 @@
+# Normalise line endings in the repository, but keep the Windows launcher usable.
+* text=auto eol=lf
+*.bat text eol=crlf

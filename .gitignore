@@ -1,0 +1,14 @@
+.gradle/
+build/
+out/
+.idea/
+.intellijPlatform/
+.kotlin/
+*.iml
+*.ipr
+*.iws
+.DS_Store
+local.properties
+
+# Keep the wrapper committed.
+!gradle/wrapper/gradle-wrapper.jar
