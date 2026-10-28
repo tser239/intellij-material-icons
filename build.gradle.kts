@@ -68,7 +68,7 @@ intellijPlatform {
 
         changeNotes = """
             <ul>
-                <li>Initial release.</li>
+                <li>Plugin logo for the Marketplace and the IDE plugins list.</li>
                 <li>Full Material Icon Theme: 1256 icons, 2156 file names, 1391 extensions and 4674 folder names.</li>
                 <li>Folder icons redrawn on IntelliJ's folder silhouette, with light and dark variants.</li>
                 <li>File and folder icon providers, custom associations, settings page.</li>

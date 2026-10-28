@@ -11,19 +11,25 @@ File icons are upstream artwork unchanged. **Folder icons are not**: each one ke
 colour and symbol but is redrawn on IntelliJ's own folder silhouette, with the symbol re-fitted
 into a shared box, so a folder in the Project View still looks like an IntelliJ folder.
 
+![Folder icons before and after](docs/folder-icons-before-after.png)
+
 ## Install
 
 The plugin targets IntelliJ-based IDEs **2026.2** (build 262) and newer. It uses only platform
 APIs, so it works in IDEA, WebStorm, PyCharm, Rider and the rest.
 
-It is not on the JetBrains Marketplace yet. To install a local build:
+It is published on the JetBrains Marketplace and currently awaiting the first review:
+<https://plugins.jetbrains.com/plugin/35596-material-icons-for-ides>. Once approved, install it
+from **Settings | Plugins | Marketplace**.
+
+Until then, install a local build:
 
 ```bash
 ./gradlew buildPlugin
 ```
 
 Then open **Settings | Plugins | ⚙ | Install Plugin from Disk…** and pick
-`build/distributions/intellij-material-icons-0.1.0.zip`.
+`build/distributions/intellij-material-icons-0.1.1.zip`.
 
 After installing, enable **Apply Material icons to files and folders without a custom
 association** under **Settings | Appearance & Behavior | Material Icons** for the complete look;
@@ -149,8 +155,8 @@ The version lives in `gradle.properties` (`pluginVersion`); the change notes liv
 2. Tag the commit and push the tag:
 
    ```bash
-   git tag -a v0.1.0 -m "v0.1.0"
-   git push origin v0.1.0
+   git tag -a v0.1.1 -m "v0.1.1"
+   git push origin v0.1.1
    ```
 
 3. The [Release workflow](.github/workflows/release.yml) runs the tests and the Plugin Verifier,
@@ -161,14 +167,16 @@ Everything can be done locally too:
 
 ```bash
 ./gradlew test buildPlugin verifyPlugin
-gh release create v0.1.0 build/distributions/*.zip --generate-notes
+gh release create v0.1.1 build/distributions/*.zip --generate-notes
 PUBLISH_TOKEN=... ./gradlew publishPlugin
 ```
 
-**The first Marketplace upload must be manual** — JetBrains requires the plugin to exist before
-Gradle can publish updates to it. Log in at <https://plugins.jetbrains.com/author/me>, choose
-**Add new plugin**, and upload `build/distributions/intellij-material-icons-0.1.0.zip`. Every later
-version can then be published by the workflow or by `publishPlugin`.
+**The first Marketplace upload is always manual** — JetBrains requires the plugin to exist before
+Gradle can publish updates. That was done for 0.1.0, which is listed as
+[plugin 35596](https://plugins.jetbrains.com/plugin/35596-material-icons-for-ides). Add the
+`PUBLISH_TOKEN` secret afterwards; every later version can then be published by the workflow or by
+`publishPlugin`. Each upload goes through moderation, so wait until the current version is approved
+before tagging the next one.
 
 ### Signing
 
